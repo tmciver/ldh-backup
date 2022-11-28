@@ -2,6 +2,8 @@
 
 ldh_dir="$1"
 backup_dir="$2"
+host="$3"
+fuseki_port="$4"
 
 # Backup the uploads directory.
 #
@@ -11,4 +13,5 @@ backup_dir="$2"
 mkdir -p "$backup_dir"/uploads/
 sudo rsync -a "$ldh_dir"/uploads/ "$backup_dir"/uploads/
 
-# TDB: backup the data directory
+# Backup the triplestore
+curl "http://$host:$fuseki_port"/ds | gzip > "$backup_dir"/ldh-triples.trig.gz
