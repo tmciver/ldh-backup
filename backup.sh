@@ -1,9 +1,63 @@
 #!/usr/bin/env bash
 
-ldh_dir="$1"
-backup_dir="$2"
-host="$3"
-fuseki_port="$4"
+print_usage()
+{
+    printf "Creates a backup of LinkedDataHub data.\n"
+    printf "\n"
+    printf "Usage:  %s options\n" "$0"
+    printf "\n"
+    printf "Options:\n"
+    printf "  -h, --host                           LDH hostname (optional; default: localhost)\n"
+    printf "  -p, --port                           Port for Fuseki (optional; default: 3030)\n"
+    printf "  -d, --ldh-dir                        LDH directory\n"
+    printf "  -b, --backup-dir                     Directory in which to store backup data\n"
+}
+
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+        -h|--host)
+        host="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        -p|--port)
+        port="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        -d|--ldh-dir)
+        ldh_dir="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        -b|--backup-dir)
+        backup_dir="$2"
+        shift # past argument
+        shift # past value
+        ;;
+    esac
+done
+
+if [ -z "$host" ] ; then
+    host=localhost
+fi
+
+if [ -z "$port" ] ; then
+    port=3030
+fi
+
+if [ -z "$ldh_dir" ] ; then
+    print_usage
+    exit 1
+fi
+
+if [ -z "$backup_dir" ] ; then
+    print_usage
+    exit 1
+fi
 
 # Backup the uploads directory.
 #
@@ -14,4 +68,4 @@ mkdir -p "$backup_dir"/uploads/
 sudo rsync -a "$ldh_dir"/uploads/ "$backup_dir"/uploads/
 
 # Backup the triplestore
-curl "http://$host:$fuseki_port"/ds | gzip > "$backup_dir"/ldh-triples.trig.gz
+curl "http://$host:$port"/ds | gzip > "$backup_dir"/ldh-triples.trig.gz
