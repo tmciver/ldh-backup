@@ -68,4 +68,4 @@ mkdir -p "$backup_dir"/uploads/
 sudo rsync -a "$ldh_dir"/uploads/ "$backup_dir"/uploads/
 
 # Backup the triplestore
-curl "http://$host:$port"/ds | gzip > "$backup_dir"/ldh-triples.trig.gz
+curl "http://$host:$port"/ds | gzip > "$backup_dir"/ldh-triples-$(date +"%Y%m%d%H%M").trig.gz
