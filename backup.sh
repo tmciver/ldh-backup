@@ -8,7 +8,8 @@ print_usage()
     printf "\n"
     printf "Options:\n"
     printf "  -h, --host                           LDH hostname (optional; default: localhost)\n"
-    printf "  -p, --port                           Port for Fuseki (optional; default: 3030)\n"
+    printf "  -u, --user-port                      Port for Fuseki user data (optional; default: 3031)\n"
+    printf "  -a, --admin-port                     Port for Fuseki admin data (optional; default: 3030)\n"
     printf "  -d, --ldh-dir                        LDH directory\n"
     printf "  -b, --backup-dir                     Directory in which to store backup data\n"
 }
@@ -23,8 +24,13 @@ do
         shift # past argument
         shift # past value
         ;;
-        -p|--port)
-        port="$2"
+        -u|--user-port)
+        user_port="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        -a|--admin-port)
+        admin_port="$2"
         shift # past argument
         shift # past value
         ;;
@@ -45,8 +51,12 @@ if [ -z "$host" ] ; then
     host=localhost
 fi
 
-if [ -z "$port" ] ; then
-    port=3030
+if [ -z "$user_port" ] ; then
+    user_port=3031
+fi
+
+if [ -z "$admin_port" ] ; then
+    admin_port=3030
 fi
 
 if [ -z "$ldh_dir" ] ; then
@@ -67,5 +77,9 @@ fi
 mkdir -p "$backup_dir"/uploads/
 sudo rsync -a "$ldh_dir"/uploads/ "$backup_dir"/uploads/
 
-# Backup the triplestore
-curl "http://$host:$port"/ds | gzip > "$backup_dir"/ldh-triples-$(date +"%Y%m%d%H%M").trig.gz
+# Backup the user triplestore
+timestamp=$(date +"%Y%m%d%H%M")
+curl "http://$host:$user_port"/ds | gzip > "$backup_dir/ldh-user-triples-$timestamp.trig.gz"
+
+# Backup the admin triplestore
+curl "http://$host:$admin_port"/ds | gzip > "$backup_dir/ldh-admin-triples-$timestamp.trig.gz"

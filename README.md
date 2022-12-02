@@ -9,26 +9,30 @@ project](https://github.com/AtomGraph/LinkedDataHub)) instance.
 Ensure that the following are satisfied:
 
 * you must have access to the host running LDH and
-* the triplestore (Fuseki) must be accessible on the host
+* the triplestores (Fuseki) must be accessible on the host
 
-If you're running LDH using `docker-compose`, Fuseki will not be exposed to the
-host by default.  To expose it, you can use a `docker-compose.override.yml` file
-alongside the `docker-compose.yml` file.  Make a copy of
+If you're running LDH using `docker-compose`, the two Fuseki triplestores will
+not be exposed to the host by default.  To expose them, you can use a
+`docker-compose.override.yml` file alongside the `docker-compose.yml` file.
+Make a copy of
 [docker-compose.debug.yml](https://github.com/AtomGraph/LinkedDataHub/blob/db0b49ec0f6b9a650382ece05e731c0b1b17c3b1/docker-compose.debug.yml)
 and rename it with:
 
     $ cp docker-compose.debug.yml docker-compose.override.yml
 
-Edit the file to expose the port for the `fuseki-end-user` service.  You should
-have a section like the following:
+This file may already contain the necessary port mappings but you should ensure
+that is data like the following:
 
 ```
-fuseki-end-user:
+fuseki-admin:
     ports:
       - 3030:3030
+fuseki-end-user:
+    ports:
+      - 3031:3030
 ```
 
-Start the system as usual with `docker-compose up -d` and Fuseki's port should
+Start the system as usual with `docker-compose up -d` and Fuseki's ports should
 now be exposed to the host.
 
 ## Running
@@ -36,7 +40,8 @@ now be exposed to the host.
 The backup script accepts the following parameters:
 
 * `-h`, `--host` - The host name or IP of the LDH instance. Defaults to localhost.
-* `-p`, `--port` - The port that Fuseki is available on. Defaults to 3030.
+* `-p`, `--user-port` - The port that Fuseki end user data is available on. Defaults to 3031.
+* `-p`, `--admin-port` - The port that Fuseki admin data is available on. Defaults to 3030.
 * `-d`, `--ldh-dir` - The base directory of the LDH project.
 * `-b`, `--backup-dir` - The directory in which you'd like the backup data stored.
 
@@ -45,7 +50,8 @@ The backup command should look something like:
 ```
 $ ./backup.sh \
   --host localhost \
-  --port 3030 \
+  --admin-port 3030 \
+  --user-port 3031 \
   --ldh-dir /path/to/linked-data-hub \
   --backup-dir /path/to/ldh/backups
 ```
