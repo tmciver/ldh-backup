@@ -37,6 +37,8 @@ now be exposed to the host.
 
 ## Running
 
+### Backing Up
+
 The backup script accepts the following parameters:
 
 * `-h`, `--host` - The host name or IP of the LDH instance. Defaults to localhost.
@@ -59,3 +61,31 @@ $ ./backup.sh \
 
 You can run the script as frequently as you like; the zipped file containing the
 triplestore data is timestamped with minute resolution.
+
+### Restoring
+
+The restore script accepts the following parameters:
+
+* `-h`, `--host` - The host name or IP of the LDH instance. Defaults to localhost.
+* `-p`, `--user-port` - The port that Fuseki end user data is available on. Defaults to 3031.
+* `-p`, `--admin-port` - The port that Fuseki admin data is available on. Defaults to 3030.
+* `-l`, `--ldh-dir` - The base directory of the LDH project.
+* `-b`, `--backup-dir` - The directory in which you'd like the backup data stored.
+* `-d`, `--data-source` - The name of the Fuseki data source. Defaults to "ds".
+* `-t`, `--timestamp` - The timestamp of the backup to restore.
+
+The restore command should look something like:
+
+```
+$ ./restore.sh \
+  --host localhost \
+  --admin-port 3030 \
+  --user-port 3031 \
+  --ldh-dir /path/to/linked-data-hub \
+  --backup-dir /path/to/ldh/backups
+  --timestamp 202212020934
+```
+
+Note that this operation will overwrite the existing user and admin triples so
+be sure to back up any not-yet-backed-up data first if you don't want to lose
+it.
