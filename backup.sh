@@ -12,6 +12,7 @@ print_usage()
     printf "  -a, --admin-port                     Port for Fuseki admin data (optional; default: 3030)\n"
     printf "  -l, --ldh-dir                        LDH directory\n"
     printf "  -b, --backup-dir                     Directory in which to store backup data\n"
+    printf "  -d, --data-source                    The name of the Fuseki data source (optional; default: ds)\n"
 }
 
 while [[ $# -gt 0 ]]
