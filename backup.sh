@@ -44,6 +44,11 @@ do
         shift # past argument
         shift # past value
         ;;
+        -d|--data-source)
+        data_source="$2"
+        shift # past argument
+        shift # past value
+        ;;
         *)    # unknown arguments
         shift # past argument
         ;;
@@ -72,6 +77,10 @@ if [ -z "$admin_port" ] ; then
     admin_port=3030
 fi
 
+if [ -z "$data_source" ] ; then
+    data_source="ds"
+fi
+
 if [ -z "$ldh_dir" ] ; then
     print_usage
     exit 1
@@ -92,7 +101,7 @@ sudo rsync -a "$ldh_dir"/uploads/ "$backup_dir"/uploads/
 
 # Backup the user triplestore
 timestamp=$(date +"%Y%m%d%H%M")
-curl "http://$host:$user_port"/ds | gzip > "$backup_dir/ldh-user-triples-$timestamp.trig.gz"
+curl -f "http://$host:$user_port/$data_source" | gzip > "$backup_dir/ldh-user-triples-$timestamp.trig.gz"
 
 # Backup the admin triplestore
-curl "http://$host:$admin_port"/ds | gzip > "$backup_dir/ldh-admin-triples-$timestamp.trig.gz"
+curl -f "http://$host:$admin_port/$data_source" | gzip > "$backup_dir/ldh-admin-triples-$timestamp.trig.gz"
