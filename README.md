@@ -42,8 +42,9 @@ The backup script accepts the following parameters:
 * `-h`, `--host` - The host name or IP of the LDH instance. Defaults to localhost.
 * `-p`, `--user-port` - The port that Fuseki end user data is available on. Defaults to 3031.
 * `-p`, `--admin-port` - The port that Fuseki admin data is available on. Defaults to 3030.
-* `-d`, `--ldh-dir` - The base directory of the LDH project.
+* `-l`, `--ldh-dir` - The base directory of the LDH project.
 * `-b`, `--backup-dir` - The directory in which you'd like the backup data stored.
+* `-d`, `--data-source` - The name of the Fuseki data source. Defaults to "ds".
 
 The backup command should look something like:
 
