@@ -10,7 +10,7 @@ print_usage()
     printf "  -h, --host                           LDH hostname (optional; default: localhost)\n"
     printf "  -u, --user-port                      Port for Fuseki user data (optional; default: 3031)\n"
     printf "  -a, --admin-port                     Port for Fuseki admin data (optional; default: 3030)\n"
-    printf "  -d, --ldh-dir                        LDH directory\n"
+    printf "  -l, --ldh-dir                        LDH directory\n"
     printf "  -b, --backup-dir                     Directory in which to store backup data\n"
 }
 
@@ -34,7 +34,7 @@ do
         shift # past argument
         shift # past value
         ;;
-        -d|--ldh-dir)
+        -l|--ldh-dir)
         ldh_dir="$2"
         shift # past argument
         shift # past value
@@ -44,8 +44,21 @@ do
         shift # past argument
         shift # past value
         ;;
+        *)    # unknown arguments
+        shift # past argument
+        ;;
     esac
 done
+
+if [ -z "$ldh_dir" ] ; then
+    print_usage
+    exit 1
+fi
+
+if [ -z "$backup_dir" ] ; then
+    print_usage
+    exit 1
+fi
 
 if [ -z "$host" ] ; then
     host=localhost
