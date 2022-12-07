@@ -82,7 +82,7 @@ $ ./restore.sh \
   --admin-port 3030 \
   --user-port 3031 \
   --ldh-dir /path/to/linked-data-hub \
-  --backup-dir /path/to/ldh/backups
+  --backup-dir /path/to/ldh/backups \
   --timestamp 202212020934
 ```
 
